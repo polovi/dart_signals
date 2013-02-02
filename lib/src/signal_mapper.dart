@@ -1,13 +1,13 @@
 part of dart_signals;
 
-class SignalMapper<T> {
-  Map<Object, T> hashMap;
+class SignalMapper<K, V> {
+  Map<K, V> senderMap;
   
   /** This signal is emitted when map() is signalled from an object that has a Type mapping set. */
   Signal mapped = new Signal();
   
   SignalMapper() {
-    hashMap = new Map<Object, T>();
+    senderMap = new Map<K, V>();
   }
   
   /**
@@ -15,30 +15,30 @@ class SignalMapper<T> {
    * 
    * There may be at most one integer [id] for each sender.
    */
-  void setMapping(Object sender, T id) {
-    if (hashMap.values.contains(id)) {
+  void setMapping(K sender, V id) {
+    if (senderMap.values.contains(id)) {
       throw new ExpectException('There may be at most one ID of specified Type for each sender.');
     }
-    hashMap[sender] = id;
+    senderMap[sender] = id;
   }
   
-  void removeMapping(Object sender) {
-    hashMap.remove(sender);
+  void removeMapping(K sender) {
+    senderMap.remove(sender);
   }
 
   /**
    * Returns the sender object that is associated with the [id] of specified Type.
    */
-  Object mapping(T id) {
-    return hashMap.keys.where((k) => hashMap[k] == id).first;
+  Object mapping(V id) {
+    return senderMap.keys.where((k) => senderMap[k] == id).first;
   }
   
   /**
    * This slot emits signals based on which object sends signals to it.
    */
-  T map(Object sender) {
-    if (hashMap.containsKey(sender)) {
-      mapped.emit(sender:hashMap[sender]);
+  void map(K sender) {
+    if (senderMap.containsKey(sender)) {
+      mapped.emit(sender:senderMap[sender]);
     }
   }
 }
