@@ -5,7 +5,7 @@ class Signal {
   
   Signal([Object sender = null]) : _signal = new _SignalImpl(sender);
   
-  connect(slot) => _signal.listen(slot);
+  connect(slot) => _signal.subscribe(slot);
   
   bool get hasSubscribers => _signal._hasSubscribers;
   

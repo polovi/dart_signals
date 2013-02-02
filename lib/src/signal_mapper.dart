@@ -1,6 +1,6 @@
 part of dart_signals;
 
-class SignalMapper<K, V> {
+class SignalMapper<K extends Object, V> {
   Map<K, V> senderMap;
   
   /** This signal is emitted when map() is signalled from an object that has a Type mapping set. */

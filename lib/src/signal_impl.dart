@@ -2,16 +2,16 @@ part of dart_signals;
 
 
 class _SignalImpl {
-  List _listeners;
+  List _subscribers;
   Object _sender;
   
-  _SignalImpl(this._sender) : _listeners = new List();
+  _SignalImpl(this._sender) : _subscribers = new List();
 
-  bool get _hasSubscribers => !_listeners.isEmpty;
+  bool get _hasSubscribers => !_subscribers.isEmpty;
   
-  _SignalSubscriptionImpl listen(slot) {
+  _SignalSubscriptionImpl subscribe(slot) {
     _SignalSubscriptionImpl subscription = _createSubscription(slot);
-    _addListener(subscription);
+    _addSubscriber(subscription);
     return subscription;
   }
   
@@ -19,12 +19,12 @@ class _SignalImpl {
     return new _SignalSubscriptionImpl(this, _sender, slot);
   }
   
-  void _disconnect(_SignalListener listener) {
-    assert(identical(listener._source, this));
-    if (!_listeners.contains(listener)) {
+  void _disconnect(_SignalSubscriber subscriber) {
+    assert(identical(subscriber._source, this));
+    if (!_subscribers.contains(subscriber)) {
       return;
     }
-    _removeListener(listener);
+    _removeSubscriber(subscriber);
   }
   
   void _emit(List<dynamic> positionalArguments, Map<dynamic, dynamic> namedArguments) {
@@ -34,19 +34,19 @@ class _SignalImpl {
   }
   
   void _forEachSubscriber(
-    void action(_SignalListener subscription)) {
+    void action(_SignalSubscriber subscription)) {
     if (!_hasSubscribers) return;
-    _listeners.forEach((_SignalListener current) {
+    _subscribers.forEach((_SignalSubscriber current) {
       action(current);
     });
   }
   
-  void _addListener(listener) {
-    _listeners.add(listener);
+  void _addSubscriber(subscriber) {
+    _subscribers.add(subscriber);
   }
   
-  void _removeListener(_SignalListener listener) {
-    _listeners.remove(listener);
+  void _removeSubscriber(_SignalSubscriber subscriber) {
+    _subscribers.remove(subscriber);
   }
 }
 
@@ -54,15 +54,15 @@ abstract class SignalSubscription {
   void disconnect();
 }
 
-abstract class _SignalListener {
+abstract class _SignalSubscriber {
   final _SignalImpl _source;
 
-  _SignalListener(this._source);
+  _SignalSubscriber(this._source);
   
   _emitData(List<dynamic> positionalArguments, Map<dynamic, dynamic> namedArguments);
 }
 
-class _SignalSubscriptionImpl extends _SignalListener  
+class _SignalSubscriptionImpl extends _SignalSubscriber  
                               implements SignalSubscription {
 
   Object _sender;
