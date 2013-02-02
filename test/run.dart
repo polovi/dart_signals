@@ -1,6 +1,5 @@
 library dart_signals_test;
 
-import 'dart:async';
 import 'package:unittest/unittest.dart';
 import 'package:dart_signals/dart_signals.dart';
 
