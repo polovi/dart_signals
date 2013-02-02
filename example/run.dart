@@ -2,46 +2,69 @@ library signals_example;
 
 import 'package:dart_signals/dart_signals.dart';
 
-class Button {
+class Option {
   Signal textChanged;
-  String text;
+  Signal descriptionChanged;
+  String _text;
+  String _description;
   
-  Button() {
+  Option() {
     textChanged = new Signal(this);
+    descriptionChanged = new Signal(this);
   }
   
-  void setText(String text) {
-    this.text = text;
-    textChanged.emit(text);
+  String get text => _text;
+  
+  set text(String text) {
+    _text = text;
+    textChanged.emit(_text);
+  }
+  
+  String get description => _description;
+  
+  set description(String description) {
+    _description = description;
+    descriptionChanged.emit(_description);
   }
 }
 
 
 main() {
 
-  Button b1 = new Button();
-  Button b2 = new Button();
-  Button b3 = new Button();
+  Option o1 = new Option();
+  Option o2 = new Option();
+  Option o3 = new Option();
+  Option o4 = new Option();
   
-  SignalMapper<int> textChangedMapper = new SignalMapper<int>();
+  SignalMapper<String> textChangedMapper = new SignalMapper<String>();
   
-  textChangedMapper.setMapping(b1, 1);
-  textChangedMapper.setMapping(b2, 2);
-  textChangedMapper.setMapping(b3, 3);
+  textChangedMapper.setMapping(o1, "Option 1");
+  textChangedMapper.setMapping(o2, "Option 2");
+  textChangedMapper.setMapping(o3, "Option 3");
   
-  void slot({sender}) {
-    Button b = textChangedMapper.mapping(sender) as Button;
-    print("button ${sender} has new text: ${b.text}");
+  void techChangedSlot({sender}) {
+    Option o = textChangedMapper.mapping(sender) as Option;
+    print("option ${sender} has new text: \"${o.text}\"");
   }
 
-  b1.textChanged.connect(textChangedMapper);
-  b2.textChanged.connect(textChangedMapper);
-  b3.textChanged.connect(textChangedMapper);
+  print(textChangedMapper.mapping("Option 1")); // Instance of 'Option'
   
-  textChangedMapper.mapped.connect(slot);
+  o1.textChanged.connect(textChangedMapper);
+  o2.textChanged.connect(textChangedMapper);
+  o3.textChanged.connect(textChangedMapper);
   
-  b3.setText("Button 3");
-  b1.setText("Button 1");
-  b2.setText("Button 2");
+  textChangedMapper.mapped.connect(techChangedSlot);
+  
+  o3.text = "Option 3 text";
+  o1.text = "Option 1 text";
+  o2.text = "Option 2 text";
+  
+  void descriptionChangedSlot(String description) {
+    print("option Option 4 has new description: \"${description}\"");
+  }
+  
+  o4.descriptionChanged.connect(descriptionChangedSlot);
+  
+  o4.description = "Option 4 description";
 }
 
