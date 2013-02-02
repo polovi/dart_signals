@@ -1,4 +1,6 @@
 dart_signals
 ============
 
-Dart implementation of QT Signal/Slot 
+https://drone.io/github.com/polovi/dart_signals/status.png
+
+Dart implementation of QT Signal/Slot mechanism 
