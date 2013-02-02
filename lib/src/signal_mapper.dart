@@ -30,7 +30,8 @@ class SignalMapper<K extends Object, V> {
    * Returns the sender object that is associated with the [id] of specified Type.
    */
   Object mapping(V id) {
-    return senderMap.keys.where((k) => senderMap[k] == id).first;
+    var where = senderMap.keys.where((k) => senderMap[k] == id);
+    return !where.isEmpty ? where.first : null;
   }
   
   /**
