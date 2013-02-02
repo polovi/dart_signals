@@ -38,7 +38,7 @@ class SignalMapper<K extends Object, V> {
    */
   void map(K sender) {
     if (senderMap.containsKey(sender)) {
-      mapped.emit(sender:senderMap[sender]);
+      mapped.emit(senderMap[sender]);
     }
   }
 }
