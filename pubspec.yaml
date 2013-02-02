@@ -3,3 +3,5 @@ version: 0.0.1
 author: '"Tomas Polovincak <polovincak.tomas@gmail.com>"'
 description: Dart implementation of QT Signal/Slot
 homepage: https://github.com/polovi/dart_signals.git
+dependencies:
+  unittest: any
