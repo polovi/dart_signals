@@ -10,12 +10,10 @@ class Signal {
   bool get hasSubscribers => _signal._hasSubscribers;
   
   noSuchMethod(InvocationMirror invocation) {
-    if (!invocation.isMethod || invocation.memberName != 'emit') {
-      invocation.namedArguments['x'] = "ahoj";
-      super.noSuchMethod(invocation);
+    if (invocation.isMethod && invocation.memberName == 'emit') {
+      return _signal._emit(invocation.positionalArguments, invocation.namedArguments);
     }
-
-    _signal._emit(invocation.positionalArguments, 
-                  invocation.namedArguments);
+    
+    super.noSuchMethod(invocation);
   }
 }
